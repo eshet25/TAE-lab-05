@@ -1,7 +1,7 @@
 ---
 title: "Lab 05 - La Quinta is Spanish for next to Denny's, Pt. 2"
-author: "Insert your name here"
-date: "Insert date here"
+author: "Tsion"
+date: "02/16/2026"
 output: github_document
 ---
 
@@ -10,7 +10,10 @@ output: github_document
 ```{r load-packages, message = FALSE}
 library(tidyverse) 
 library(readr) 
+library(dsbox)
 ```
+
+#Not sure why dsbox is not working for me, had to manually load the data files again.
 
 ```{r load-data, message = FALSE}
 states <- read_csv("data/states.csv")
@@ -18,34 +21,62 @@ dennys <- read_csv("data/dennys.csv")
 laquinta <- read_csv("data/laquinta.csv")
 ```
 
+```{r for-easier-coding}
+dn <- dennys
+lq <- laquinta
+```
+
+```{r check-data}
+names(dn)
+names(lq)
+```
+
 ### Exercise 1
 
-Remove this text, and add your answer for Exercise 1 here.
-Add code chunks as needed.
-Don't forget to label your code chunk.
-Do not use spaces in code chunk labels.
+```{r filter-Alaska}
+dn_ak <- dn %>%
+  filter (state == "AK")
+nrow(dn_ak)
+
+lq_ak <- lq %>%
+  filter (state == "AK")
+nrow(lq_ak)
+```
+
+There are `r nrow(dn_ak)` Denny's and `r nrow(lq_ak)` La Quinta locations in the state of Alaska. 
 
 ### Exercise 2
 
-Remove this text, and add your answer for Exercise 1 here.
-Add code chunks as needed.
-Don't forget to label your code chunk.
-Do not use spaces in code chunk labels.
+```{r claculate-number-of-pairings}
+nrow(dn_ak) * nrow(lq_ak)
+```
+
+There are `r nrow(dn_ak) * nrow(lq_ak)` pairings between all Denny's and all La Quinta locations in Alaska. 
 
 ### Exercise 3
 
-...
+```{r join-two-dataframes}
+# we want to keep all rows and columns from both data frames. 
+dn_lq_ak <- full_join(dn_ak, lq_ak,
+    by = "state")
+dn_lq_ak
+```
+
 
 ### Exercise 4
 
-...
+```{r check-joined-dataframe}
+nrow(dn_lq_ak)
+names(dn_lq_ak)
+```
+
+There are `r nrow(dn_lq_ak)` observations in the joined data frame. The variables are address, city, state, zip, longitude, and latitiude for each pairing of Denny's and La Quinta labbelled as (x) and (y) for all variables (except state).
 
 ### Exercise 5
 
-...
+
 
 ### Exercise 6
 
-...
 
-Add exercise headings as needed.
+
