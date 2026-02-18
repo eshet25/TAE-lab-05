@@ -177,6 +177,36 @@ dn_lq_ak_minidist
 
 ### Exercise 8
 
+``` r
+#Describe distribution
+summary(dn_lq_ak_minidist)
+```
+
+    ##   address.x           mini_dist    
+    ##  Length:3           Min.   :2.035  
+    ##  Class :character   1st Qu.:3.616  
+    ##  Mode  :character   Median :5.197  
+    ##                     Mean   :4.410  
+    ##                     3rd Qu.:5.598  
+    ##                     Max.   :5.998
+
+``` r
+#visualization
+ggplot(dn_lq_ak_minidist, aes(x = mini_dist)) + 
+  geom_histogram( fill = "steelblue", color = "black") +
+labs (
+  title = "Distribution of nearest La Quinta to Denny's",
+  subtitle = "In Alaska",
+  x = "Minimum Dsitance (km)",
+  y = "Denny's Locations (count)",
+) + 
+  theme_bw()
+```
+
+    ## `stat_bin()` using `bins = 30`. Pick better value `binwidth`.
+
+![](lab-05_files/figure-gfm/distribution-of-distances-of-dn-&-lq-Alaska-1.png)<!-- -->
+
 ### Exercise 9
 
 ### Exercise 10
