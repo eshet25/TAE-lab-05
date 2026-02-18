@@ -129,7 +129,7 @@ summary(dn_lq_ak_minidist)
 ggplot(dn_lq_ak_minidist, aes(x = mini_dist)) + 
   geom_histogram( fill = "steelblue", color = "black") +
 labs (
-  title = "Distribution of nearest La Quinta to Denny's",
+  title = "Distribution of Nearest La Quinta to Denny's",
   subtitle = "In Alaska",
   x = "Minimum Dsitance (km)",
   y = "Denny's Locations (count)",
@@ -137,16 +137,181 @@ labs (
   theme_bw()
 ```
 
+### Exercise 9: North Carolina
 
-### Exercise 9
+```{r filter-for-NC}
+dn_nc <- dn %>%
+  filter(state == "NC")
+
+lq_nc <- lq %>%
+  filter(state == "NC")
+```
+
+There are `r nrow(dn_nc)` Denny's and `r nrow(lq_nc)` La Quinta locations in North Carolina. 
+
+```{r nc-pairings}
+nrow(dn_nc) * nrow(lq_nc)
+```
 
 
-### Exercise 10
+```{r nc-join-data-frames}
+dn_lq_nc <- full_join(dn_nc, lq_nc, by = "state")
+```
+
+```{r nc-add-distance-column}
+dn_lq_nc <- dn_lq_nc %>%
+  mutate(
+    distance = haversine(longitude.x, latitude.x,
+                         longitude.y, latitude.y)
+  )
+
+```
+
+```{r nc-minimum-distance}
+dn_lq_nc_minidist <- dn_lq_nc %>%
+  group_by(address.x) %>%
+  summarise(
+    mini_dist = min(distance, na.rm = TRUE),
+    .groups = "drop"
+  )
+dn_lq_nc_minidist
+```
+
+```{r  nc-distribution-of-distances-of-dn-&-lq}
+#describe distribution 
+
+summary(dn_lq_nc_minidist)
+
+#visualize
+ggplot(dn_lq_nc_minidist, aes(x = mini_dist)) + 
+  geom_histogram( fill = "forestgreen", color = "black") +
+labs (
+  title = "Distribution of Nearest La Quinta to Denny's",
+  subtitle = "In North Carolina",
+  x = "Minimum Dsitance (km)",
+  y = "Denny's Locations (count)",
+) + 
+  theme_bw()
+
+```
 
 
-### Exercise 11
+### Exercise 10: Texas
 
+```{r filter-for-TX}
+dn_tx <- dn %>%
+  filter(state == "TX")
+
+lq_tx <- lq %>%
+  filter(state == "TX")
+```
+
+There are `r nrow(dn_tx)` Denny's and `r nrow(lq_tx)` La Quinta locations in Texas. 
+
+```{r tx-pairings}
+nrow(dn_tx) * nrow(lq_tx)
+```
+
+```{r tx-join-data-frames}
+dn_lq_tx <- full_join(dn_tx, lq_tx, by = "state")
+```
+
+```{r tx-add-distance-column}
+dn_lq_tx <- dn_lq_tx %>%
+  mutate(
+    distance = haversine(longitude.x, latitude.x,
+                         longitude.y, latitude.y)
+  )
+
+```
+
+```{r tx-minimum-distance}
+dn_lq_tx_minidist <- dn_lq_tx %>%
+  group_by(address.x) %>%
+  summarise(
+    mini_dist = min(distance, na.rm = TRUE),
+    .groups = "drop"
+  )
+dn_lq_tx_minidist
+```
+
+```{r  tx-distribution-of-distances-of-dn-&-lq}
+#describe distribution 
+
+summary(dn_lq_tx_minidist)
+
+#visualize
+ggplot(dn_lq_tx_minidist, aes(x = mini_dist)) + 
+  geom_histogram( fill = "indianred", color = "black") +
+labs (
+  title = "Distribution of Nearest La Quinta to Denny's",
+  subtitle = "In Texas",
+  x = "Minimum Dsitance (km)",
+  y = "Denny's Locations (count)",
+) + 
+  theme_bw()
+
+```
+
+### Exercise 11: New York 
+
+```{r filter-for-NY}
+dn_ny <- dn %>%
+  filter(state == "NY")
+
+lq_ny <- lq %>%
+  filter(state == "NY")
+```
+
+There are `r nrow(dn_ny)` Denny's and `r nrow(lq_ny)` La Quinta locations in Texas. 
+
+```{r ny-pairings}
+nrow(dn_ny) * nrow(lq_ny)
+```
+
+```{r ny-join-data-frames}
+dn_lq_ny <- full_join(dn_ny, lq_ny, by = "state")
+```
+
+```{r ny-add-distance-column}
+dn_lq_ny <- dn_lq_ny %>%
+  mutate(
+    distance = haversine(longitude.x, latitude.x,
+                         longitude.y, latitude.y)
+  )
+
+```
+
+```{r ny-minimum-distance}
+dn_lq_ny_minidist <- dn_lq_ny %>%
+  group_by(address.x) %>%
+  summarise(
+    mini_dist = min(distance, na.rm = TRUE),
+    .groups = "drop"
+  )
+dn_lq_ny_minidist
+```
+
+```{r  ny-distribution-of-distances-of-dn-&-lq}
+#describe distribution 
+
+summary(dn_lq_ny_minidist)
+
+#visualize
+ggplot(dn_lq_ny_minidist, aes(x = mini_dist)) + 
+  geom_histogram( fill = "darkorange", color = "black") +
+labs (
+  title = "Distribution of Nearest La Quinta to Denny's",
+  subtitle = "In New York",
+  x = "Minimum Dsitance (km)",
+  y = "Denny's Locations (count)",
+) + 
+  theme_bw()
+
+```
 
 ### Exercise 12
 
+Among all the states I have examined, Mitch Hedberg’s joke is most likely to hold true in Texas. The histogram shows a postive skew showing that for most of Denny's, there is a La Quinta nearby. 
 
+Alaska has too few locations to make a concrete judgement. The histogram for North Carolina looks to be the most spread out, which makes it the least likely to work with the joke? Pretty much same with New York, the histograms are lot more spread out compared to Texas, but it also appears to show some skew? It's very hard to say it holds true for the joke though. 

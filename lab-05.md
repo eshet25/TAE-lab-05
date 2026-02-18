@@ -195,7 +195,7 @@ summary(dn_lq_ak_minidist)
 ggplot(dn_lq_ak_minidist, aes(x = mini_dist)) + 
   geom_histogram( fill = "steelblue", color = "black") +
 labs (
-  title = "Distribution of nearest La Quinta to Denny's",
+  title = "Distribution of Nearest La Quinta to Denny's",
   subtitle = "In Alaska",
   x = "Minimum Dsitance (km)",
   y = "Denny's Locations (count)",
@@ -207,10 +207,291 @@ labs (
 
 ![](lab-05_files/figure-gfm/distribution-of-distances-of-dn-&-lq-Alaska-1.png)<!-- -->
 
-### Exercise 9
+### Exercise 9: North Carolina
 
-### Exercise 10
+``` r
+dn_nc <- dn %>%
+  filter(state == "NC")
 
-### Exercise 11
+lq_nc <- lq %>%
+  filter(state == "NC")
+```
+
+There are 28 Denny’s and 12 La Quinta locations in North Carolina.
+
+``` r
+nrow(dn_nc) * nrow(lq_nc)
+```
+
+    ## [1] 336
+
+``` r
+dn_lq_nc <- full_join(dn_nc, lq_nc, by = "state")
+```
+
+    ## Warning in full_join(dn_nc, lq_nc, by = "state"): Detected an unexpected many-to-many relationship between `x` and `y`.
+    ## ℹ Row 1 of `x` matches multiple rows in `y`.
+    ## ℹ Row 1 of `y` matches multiple rows in `x`.
+    ## ℹ If a many-to-many relationship is expected, set `relationship =
+    ##   "many-to-many"` to silence this warning.
+
+``` r
+dn_lq_nc <- dn_lq_nc %>%
+  mutate(
+    distance = haversine(longitude.x, latitude.x,
+                         longitude.y, latitude.y)
+  )
+```
+
+``` r
+dn_lq_nc_minidist <- dn_lq_nc %>%
+  group_by(address.x) %>%
+  summarise(
+    mini_dist = min(distance, na.rm = TRUE),
+    .groups = "drop"
+  )
+dn_lq_nc_minidist
+```
+
+    ## # A tibble: 28 × 2
+    ##    address.x                 mini_dist
+    ##    <chr>                         <dbl>
+    ##  1 1 Regent Park Boulevard       108. 
+    ##  2 101 Wintergreen Dr            120. 
+    ##  3 103 Sedgehill Dr               26.7
+    ##  4 1043 Jimmie Kerr Road          36.1
+    ##  5 1201 S College Road           188. 
+    ##  6 1209 Burkemount Avenue         39.1
+    ##  7 1493 Us Hwy 74-A Bypass        70.1
+    ##  8 1524 Dabney Dr                 59.5
+    ##  9 1550 Four Seasons             115. 
+    ## 10 1800 Princeton-Kenly Road      55.9
+    ## # ℹ 18 more rows
+
+``` r
+#describe distribution 
+
+summary(dn_lq_nc_minidist)
+```
+
+    ##   address.x           mini_dist      
+    ##  Length:28          Min.   :  1.779  
+    ##  Class :character   1st Qu.: 22.388  
+    ##  Mode  :character   Median : 53.456  
+    ##                     Mean   : 65.444  
+    ##                     3rd Qu.: 93.985  
+    ##                     Max.   :187.935
+
+``` r
+#visualize
+ggplot(dn_lq_nc_minidist, aes(x = mini_dist)) + 
+  geom_histogram( fill = "forestgreen", color = "black") +
+labs (
+  title = "Distribution of Nearest La Quinta to Denny's",
+  subtitle = "In North Carolina",
+  x = "Minimum Dsitance (km)",
+  y = "Denny's Locations (count)",
+) + 
+  theme_bw()
+```
+
+    ## `stat_bin()` using `bins = 30`. Pick better value `binwidth`.
+
+![](lab-05_files/figure-gfm/nc-distribution-of-distances-of-dn-&-lq-1.png)<!-- -->
+
+### Exercise 10: Texas
+
+``` r
+dn_tx <- dn %>%
+  filter(state == "TX")
+
+lq_tx <- lq %>%
+  filter(state == "TX")
+```
+
+There are 200 Denny’s and 237 La Quinta locations in Texas.
+
+``` r
+nrow(dn_tx) * nrow(lq_tx)
+```
+
+    ## [1] 47400
+
+``` r
+dn_lq_tx <- full_join(dn_tx, lq_tx, by = "state")
+```
+
+    ## Warning in full_join(dn_tx, lq_tx, by = "state"): Detected an unexpected many-to-many relationship between `x` and `y`.
+    ## ℹ Row 1 of `x` matches multiple rows in `y`.
+    ## ℹ Row 1 of `y` matches multiple rows in `x`.
+    ## ℹ If a many-to-many relationship is expected, set `relationship =
+    ##   "many-to-many"` to silence this warning.
+
+``` r
+dn_lq_tx <- dn_lq_tx %>%
+  mutate(
+    distance = haversine(longitude.x, latitude.x,
+                         longitude.y, latitude.y)
+  )
+```
+
+``` r
+dn_lq_tx_minidist <- dn_lq_tx %>%
+  group_by(address.x) %>%
+  summarise(
+    mini_dist = min(distance, na.rm = TRUE),
+    .groups = "drop"
+  )
+dn_lq_tx_minidist
+```
+
+    ## # A tibble: 200 × 2
+    ##    address.x             mini_dist
+    ##    <chr>                     <dbl>
+    ##  1 100 Cottonwood           33.6  
+    ##  2 100 E Pinehurst           1.39 
+    ##  3 100 Us Highway 79 S      33.9  
+    ##  4 101 N Fm 707             10.3  
+    ##  5 1011 Beltway Parkway     14.0  
+    ##  6 1015 Spur 350 West        1.74 
+    ##  7 1015 West Main St         1.10 
+    ##  8 10367 Highway 59         37.6  
+    ##  9 10433 N Central Expwy     0.618
+    ## 10 105 W 42nd St             6.88 
+    ## # ℹ 190 more rows
+
+``` r
+#describe distribution 
+
+summary(dn_lq_tx_minidist)
+```
+
+    ##   address.x           mini_dist      
+    ##  Length:200         Min.   : 0.0160  
+    ##  Class :character   1st Qu.: 0.7305  
+    ##  Mode  :character   Median : 3.3715  
+    ##                     Mean   : 5.7918  
+    ##                     3rd Qu.: 6.6303  
+    ##                     Max.   :60.5820
+
+``` r
+#visualize
+ggplot(dn_lq_tx_minidist, aes(x = mini_dist)) + 
+  geom_histogram( fill = "indianred", color = "black") +
+labs (
+  title = "Distribution of Nearest La Quinta to Denny's",
+  subtitle = "In Texas",
+  x = "Minimum Dsitance (km)",
+  y = "Denny's Locations (count)",
+) + 
+  theme_bw()
+```
+
+    ## `stat_bin()` using `bins = 30`. Pick better value `binwidth`.
+
+![](lab-05_files/figure-gfm/tx-distribution-of-distances-of-dn-&-lq-1.png)<!-- -->
+
+### Exercise 11: New York
+
+``` r
+dn_ny <- dn %>%
+  filter(state == "NY")
+
+lq_ny <- lq %>%
+  filter(state == "NY")
+```
+
+There are 56 Denny’s and 19 La Quinta locations in Texas.
+
+``` r
+nrow(dn_ny) * nrow(lq_ny)
+```
+
+    ## [1] 1064
+
+``` r
+dn_lq_ny <- full_join(dn_ny, lq_ny, by = "state")
+```
+
+    ## Warning in full_join(dn_ny, lq_ny, by = "state"): Detected an unexpected many-to-many relationship between `x` and `y`.
+    ## ℹ Row 1 of `x` matches multiple rows in `y`.
+    ## ℹ Row 1 of `y` matches multiple rows in `x`.
+    ## ℹ If a many-to-many relationship is expected, set `relationship =
+    ##   "many-to-many"` to silence this warning.
+
+``` r
+dn_lq_ny <- dn_lq_ny %>%
+  mutate(
+    distance = haversine(longitude.x, latitude.x,
+                         longitude.y, latitude.y)
+  )
+```
+
+``` r
+dn_lq_ny_minidist <- dn_lq_ny %>%
+  group_by(address.x) %>%
+  summarise(
+    mini_dist = min(distance, na.rm = TRUE),
+    .groups = "drop"
+  )
+dn_lq_ny_minidist
+```
+
+    ## # A tibble: 56 × 2
+    ##    address.x             mini_dist
+    ##    <chr>                     <dbl>
+    ##  1 1 River St                56.0 
+    ##  2 103 Elwood Davis Road     47.1 
+    ##  3 10390 Bennet Road         74.4 
+    ##  4 1078 Glenwood Avenue       6.4 
+    ##  5 114 Wolf Road              5.4 
+    ##  6 1142 Arsenal St           99.0 
+    ##  7 1143 Deer Park Ave        19.6 
+    ##  8 118 Victory Highway       93.8 
+    ##  9 1250 Upper Front St        7.16
+    ## 10 126 Troy Rd               15.0 
+    ## # ℹ 46 more rows
+
+``` r
+#describe distribution 
+
+summary(dn_lq_ny_minidist)
+```
+
+    ##   address.x           mini_dist     
+    ##  Length:56          Min.   : 1.281  
+    ##  Class :character   1st Qu.: 7.381  
+    ##  Mode  :character   Median :24.158  
+    ##                     Mean   :33.575  
+    ##                     3rd Qu.:53.265  
+    ##                     Max.   :99.044
+
+``` r
+#visualize
+ggplot(dn_lq_ny_minidist, aes(x = mini_dist)) + 
+  geom_histogram( fill = "darkorange", color = "black") +
+labs (
+  title = "Distribution of Nearest La Quinta to Denny's",
+  subtitle = "In New York",
+  x = "Minimum Dsitance (km)",
+  y = "Denny's Locations (count)",
+) + 
+  theme_bw()
+```
+
+    ## `stat_bin()` using `bins = 30`. Pick better value `binwidth`.
+
+![](lab-05_files/figure-gfm/ny-distribution-of-distances-of-dn-&-lq-1.png)<!-- -->
 
 ### Exercise 12
+
+Among all the states I have examined, Mitch Hedberg’s joke is most
+likely to hold true in Texas. The histogram shows a postive skew showing
+that for most of Denny’s, there is a La Quinta nearby.
+
+Alaska has too few locations to make a concrete judgement. The histogram
+for North Carolina looks to be the most spread out, which makes it the
+least likely to work with the joke? Pretty much same with New York, the
+histograms are lot more spread out compared to Texas, but it also
+appears to show some skew? It’s very hard to say it holds true for the
+joke though.
