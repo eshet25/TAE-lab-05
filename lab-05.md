@@ -120,4 +120,67 @@ state).
 
 ### Exercise 5
 
+\#We use the mutate function to add new variable to a data frame while
+keeping other viarbales constant.
+
 ### Exercise 6
+
+``` r
+haversine <- function(long1, lat1, long2, lat2, round = 3) {
+  # convert to radians
+  long1 <- long1 * pi / 180
+  lat1 <- lat1 * pi / 180
+  long2 <- long2 * pi / 180
+  lat2 <- lat2 * pi / 180
+
+  R <- 6371 # Earth mean radius in km
+
+  a <- sin((lat2 - lat1) / 2)^2 + cos(lat1) * cos(lat2) * sin((long2 - long1) / 2)^2
+  d <- R * 2 * asin(sqrt(a))
+
+  return(round(d, round)) # distance in km
+}
+```
+
+``` r
+dn_lq_ak <- dn_lq_ak %>%
+  mutate (
+    distance = haversine(longitude.x,latitude.x,
+                         longitude.y, latitude.y)
+  )
+```
+
+The following are the calculated distances between all pairs of Denny’s
+and La Quinta locations in Alaska: 2.035, 416.031, 5.998, 413.653,
+419.879, 5.197.
+
+### Exercise 7
+
+``` r
+#Group by Denny’s locations and calculate a new variable for min.distance. 
+dn_lq_ak_minidist <- dn_lq_ak %>%
+  group_by(address.x) %>%
+  summarise(
+    mini_dist = min(distance, na.rm = TRUE), 
+    .groups = "drop"
+  )
+
+dn_lq_ak_minidist
+```
+
+    ## # A tibble: 3 × 2
+    ##   address.x        mini_dist
+    ##   <chr>                <dbl>
+    ## 1 1929 Airport Way      5.20
+    ## 2 2900 Denali           2.04
+    ## 3 3850 Debarr Road      6.00
+
+### Exercise 8
+
+### Exercise 9
+
+### Exercise 10
+
+### Exercise 11
+
+### Exercise 12
